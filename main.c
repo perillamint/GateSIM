@@ -10,7 +10,6 @@ void RunIt(void);
 
 FILE *theFile = NULL;
 
-void ReadaFile(char *filename);
 void ReadaFile(char *filename)
 {
 	int here, DataLen;
@@ -44,23 +43,24 @@ void ReadaFile(char *filename)
 			here = strlen(FileName) - 4;
 			if (here > 0)
 			{
-				if (FileName[here] == '.')
-					if (FileName[here + 1] == 't')
-						if (FileName[here + 2] == 'x')
-							if (FileName[here + 3] == 't')
-							{
-								FileName[here + 1] = 'l';
-								FileName[here + 2] = 'o';
-								FileName[here + 3] = 'g';
-								theFile = fopen(FileName, "r+b");
-							}
-			ReadData(theFile, InData, DataLen);
+				if (strncmp(&FileName[here], ".txt", 4))
+				{
+					strncpy(&FileName[here+1], "log", 3);
+					theFile = fopen(FileName, "r+b");
+				}
+				ReadData(theFile, InData, DataLen);
+			}
 		}
 	}
 }
 
 int main(int argc, char **argv)
 {
+	if(argc <= 1)
+	{
+		printf("Usage: %s <GateCode file>\n", argv[0]);
+		return 0;
+	}
 	ReadaFile(argv[1]);
 	do
 	{
